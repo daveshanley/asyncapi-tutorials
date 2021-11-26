@@ -1,0 +1,101 @@
+asyncapi: 2.2.0
+info:
+  title: 'Quobix AsyncAPI Tutorial: Simple Stream'
+  version: 1.0.0
+  description: >
+    A simple contract showing how to create an AsyncAPI driven API
+    using Golang with [Transport](https://github.com/vmware/transport-go) and
+    [Plank](https://github.com/vmware/transport-go/blob/main/plank).
+  contact:
+    name: Dave Shanley
+    url: 'https://quobix.com/articles/asyncapi-using-golang'
+  license:
+    name: BSD-2-Clause
+    url: 'https://opensource.org/licenses/BSD-2-Clause'
+servers:
+  plank-demo:
+    url: 'wss://transport-bus.io/ws'
+    protocol: stomp
+defaultContentType: application/json    
+
+channels:
+  topic/simple-stream:
+    description: |
+      Every second, a random word is broadcast for all subscribers to consume. 
+    subscribe:
+      message:
+        $ref: '#/components/messages/RandomWord'    
+
+components:
+  schemas:
+    TransportResponse:
+      description: >
+        `TransportResponse` is a set of required properties that always exist on any
+        response message from Transport instances.
+
+        these properties are used by various other layers in the system to
+        decide how to treat a transport message.
+
+        The `id` is always that of a paired request object, if applicable.
+      type: object
+      properties:
+        id:
+          description: >
+            `UUID` represented as a *string*. Should always be **unique** for
+            every single message.
+          type: string
+          examples:
+            - d68695be-0f11-4c9c-8644-2667135a7baf
+        version:
+          description: >
+            Version of the message, default to '1' if you don't use this
+            feature.
+          type: number
+          format: int32
+          examples:
+            - 1
+        created:
+          description: |
+            Timestamp representing when the message was created.
+          type: number
+          format: int64
+          examples:
+            - 1629991055269
+        channel:
+          description: >
+           This is the channel the service is operating over.
+          type: string
+          examples:
+            - joke-service  
+        error:
+          default: 'false'
+          description: >
+           If something went wrong, this is set to true and the message is an error response.
+          type: boolean
+        errorCode:
+          default: 0
+          description: >
+           If something went wrong and `error` is true, an error code is set.
+          type: boolean
+        errorMessage:
+          default: ""
+          description: >
+           If something went wrong, Whatever happened is described here.
+          type: boolean
+          
+  messages:
+    RandomWord:
+      description: |
+        A random word for you to enjoy. There is no way to know which word it will be.
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/TransportResponse'
+          - type: object
+            properties:
+              payload:
+                type: string
+                description: A random english word.
+                examples:
+                    - pizza
+                    - motorcycle
+                    - guitars
