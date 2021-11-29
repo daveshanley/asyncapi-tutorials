@@ -7,7 +7,6 @@ import (
 	"github.com/vmware/transport-go/bridge"
 	"github.com/vmware/transport-go/bus"
 	"github.com/vmware/transport-go/model"
-	"github.com/vmware/transport-go/plank/services"
 	"github.com/vmware/transport-go/plank/utils"
 )
 
@@ -38,15 +37,14 @@ func main() {
 	}
 
 	// create local channels for pub-sub comms that are bridged to our joke-service channel.
-	jokeSubChan := "joke-service"
+	jokeSubChan := "jokes"
 	cm.CreateChannel(jokeSubChan)
 
 	// create a handler that will listen for a single response and then unsubscribe.
 	jokeSubHandler, _ := b.ListenOnce(jokeSubChan)
 
-	// mark our local 'joke-sub' and 'joke-pub' as 'galactic' and map it to our connection and
+	// mark our local 'jokes' channel as 'galactic' and map it to our connection and
 	// the destinations defined by the AsyncAPI contract
-	//cm.MarkChannelAsGalactic(jokePubChan, "/pub/queue/joke-service", c)
 	cm.MarkChannelAsGalactic(jokeSubChan, "/queue/joke-service", c)
 
 	// create a wait group so our client stays running whilst we wait for a response.
@@ -63,17 +61,10 @@ func main() {
 			// but you only really care about the payload (body)
 			r := &model.Response{}
 			d := msg.Payload.([]byte)
-			err := json.Unmarshal(d, &r)
-			if err != nil {
-				utils.Log.Errorf("error unmarshalling request: %v", err.Error())
-				return
-			}
-
-			// the value we want is in the payload of our model.Response
-			value := r.Payload.(services.Joke)
+			json.Unmarshal(d, &r)
 
 			// log out our joke to the console.
-			utils.Log.Info(value.Joke)
+			utils.Log.Info(r.Payload.(map[string]interface{})["joke"])
 
 			wg.Done()
 		},
@@ -82,8 +73,12 @@ func main() {
 			wg.Done()
 		})
 
+	// create a joke request.
+	req := &model.Request{Request: "get-joke"}
+	reqBytes, _ := json.Marshal(req)
+
 	// publish joke request
-	c.SendJSONMessage("/pub/queue/joke-service", []byte("pizza"))
+	c.SendJSONMessage("/pub/queue/joke-service", reqBytes)
 
 	// wait for joke response to come in and be printed to the console.
 	wg.Wait()
