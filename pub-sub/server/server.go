@@ -30,6 +30,6 @@ func main() {
 	// register a system channel with the platform, so we can catch interrupts and shut down cleanly.
 	syschan := make(chan os.Signal, 1)
 
-	// start plank and start streaming random words to everyone.
+	// start plank and start listening for requests.
 	platformServer.StartServer(syschan)
 }

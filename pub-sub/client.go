@@ -7,6 +7,7 @@ import (
 	"github.com/vmware/transport-go/bridge"
 	"github.com/vmware/transport-go/bus"
 	"github.com/vmware/transport-go/model"
+	"github.com/vmware/transport-go/plank/services"
 	"github.com/vmware/transport-go/plank/utils"
 )
 
@@ -36,27 +37,24 @@ func main() {
 		utils.Log.Fatalf("unable to connect to %s, error: %v", config.ServerAddr, err.Error())
 	}
 
-	// create a local channel on the bus that we want to listen to in our application.
-	myLocalChan := "my-local-word-stream"
-	cm.CreateChannel(myLocalChan)
+	// create local channels for pub-sub comms that are bridged to our joke-service channel.
+	jokeSubChan := "joke-service"
+	cm.CreateChannel(jokeSubChan)
 
-	// listen to stream of messages coming in on channel, a handler is returned
-	// that allows you to add in lambdas that handle your success messages, and your errors.
-	handler, _ := b.ListenStream(myLocalChan)
+	// create a handler that will listen for a single response and then unsubscribe.
+	jokeSubHandler, _ := b.ListenOnce(jokeSubChan)
 
-	// mark our local 'my-local-word-stream' myLocalChan as 'galactic' and map it to our connection and
-	// the /topic/random-word service
-	err = cm.MarkChannelAsGalactic(myLocalChan, "/topic/random-word", c)
-	if err != nil {
-		utils.Log.Fatalf("unable to map local channel to broker destination: %e", err)
-	}
+	// mark our local 'joke-sub' and 'joke-pub' as 'galactic' and map it to our connection and
+	// the destinations defined by the AsyncAPI contract
+	//cm.MarkChannelAsGalactic(jokePubChan, "/pub/queue/joke-service", c)
+	cm.MarkChannelAsGalactic(jokeSubChan, "/queue/joke-service", c)
 
-	// create a wait group that will wait 10 times before completing.
+	// create a wait group so our client stays running whilst we wait for a response.
 	var wg sync.WaitGroup
-	wg.Add(10)
+	wg.Add(1)
 
-	// start and keep listening
-	handler.Handle(
+	// Start listening for our joke response.
+	jokeSubHandler.Handle(
 		func(msg *model.Message) {
 
 			// unmarshal the message payload into a model.Response object
@@ -72,25 +70,26 @@ func main() {
 			}
 
 			// the value we want is in the payload of our model.Response
-			value := r.Payload.(string)
+			value := r.Payload.(services.Joke)
 
-			// log it out.
-			utils.Log.Infof("Random word: %s", value)
+			// log out our joke to the console.
+			utils.Log.Info(value.Joke)
 
 			wg.Done()
 		},
 		func(err error) {
 			utils.Log.Errorf("error received on channel: %e", err)
+			wg.Done()
 		})
 
-	// wait for 10 ticks of the stream, then we're done.
+	// publish joke request
+	c.SendJSONMessage("/pub/queue/joke-service", []byte("pizza"))
+
+	// wait for joke response to come in and be printed to the console.
 	wg.Wait()
 
-	// close our handler, we're done.
-	handler.Close()
-
-	// mark channel as local (unsubscribe from /topic/random-word)
-	cm.MarkChannelAsLocal(myLocalChan)
+	// mark channels as local (unsubscribe)
+	cm.MarkChannelAsLocal(jokeSubChan)
 
 	// disconnect from our broker.
 	c.Disconnect()
