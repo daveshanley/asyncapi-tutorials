@@ -1,4 +1,4 @@
-module github.com/daveshanley/asyncapi-tutorials/streaming
+module github.com/daveshanley/asyncapi-tutorials/pub-sub
 
 go 1.16
 
