@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/daveshanley/asyncapi-tutorials/tutorial-1/services"
+	"github.com/daveshanley/asyncapi-tutorials/streaming/services"
 	"github.com/vmware/transport-go/plank/pkg/server"
 	"github.com/vmware/transport-go/plank/utils"
 )
