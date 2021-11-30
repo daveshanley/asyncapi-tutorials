@@ -14,12 +14,12 @@ info:
     url: 'https://opensource.org/licenses/BSD-2-Clause'
 servers:
   plank-demo:
-    url: 'wss://transport-bus.io/ws'
+    url: 'ws://localhost:30080/ws'
     protocol: stomp
 defaultContentType: application/json    
 
 channels:
-  topic/simple-stream:
+  topic/random-word:
     description: |
       Every second, a random word is broadcast for all subscribers to consume. 
     subscribe:

@@ -14,7 +14,7 @@ info:
     url: 'https://opensource.org/licenses/BSD-2-Clause'
 servers:
   plank-demo:
-    url: 'wss://transport-bus.io/ws'
+    url: 'ws://localhost:30080/ws'
     protocol: stomp
 defaultContentType: application/json    
 
