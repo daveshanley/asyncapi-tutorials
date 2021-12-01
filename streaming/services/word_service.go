@@ -115,11 +115,11 @@ func (rws *RandomWordService) OnServerShutdown() {
 }
 
 // GetRESTBridgeConfig is not used by this service.
-func (sss *RandomWordService) GetRESTBridgeConfig() []*service.RESTBridgeConfig {
+func (rws *RandomWordService) GetRESTBridgeConfig() []*service.RESTBridgeConfig {
 	return nil
 }
 
 // HandleServiceRequest is not used by this servuce.
-func (sss *RandomWordService) HandleServiceRequest(request *model.Request, core service.FabricServiceCore) {
+func (rws *RandomWordService) HandleServiceRequest(r *model.Request, c service.FabricServiceCore) {
 	// do nothing in here, we're not listening for any requests.
 }

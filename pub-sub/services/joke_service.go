@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"net/http"
 	"reflect"
 
@@ -37,12 +36,8 @@ func (js *JokeService) Init(core service.FabricServiceCore) error {
 	return nil
 }
 
-// HandleServiceRequest will listen for incoming requests with the command 'get-joke' and will then return a terrible
-// Joke back to the requestor. method
+// HandleServiceRequest will handle icoming requests from event bus on our service channel.
 func (js *JokeService) HandleServiceRequest(request *model.Request, core service.FabricServiceCore) {
-
-	fmt.Println("no way man!")
-
 	switch request.Request {
 	case "get-joke":
 		js.getJoke(request, core)

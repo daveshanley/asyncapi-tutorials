@@ -2,11 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"sync"
 
 	"github.com/vmware/transport-go/bridge"
 	"github.com/vmware/transport-go/bus"
 	"github.com/vmware/transport-go/model"
+	"github.com/vmware/transport-go/plank/services"
 	"github.com/vmware/transport-go/plank/utils"
 )
 
@@ -59,12 +61,14 @@ func main() {
 			// this is a wrapper transport uses when being used as a server,
 			// it encapsulates a rich set of data about the message,
 			// but you only really care about the payload (body)
-			r := &model.Response{}
-			d := msg.Payload.([]byte)
-			json.Unmarshal(d, &r)
+			var joke services.Joke
+			if err := msg.CastPayloadToType(&joke); err != nil {
+				fmt.Printf("failed to cast payload: %s\n", err.Error())
+			} else {
+				// log out our joke to the console.
+				utils.Log.Info(r.Payload.(map[string]interface{})["joke"])
 
-			// log out our joke to the console.
-			utils.Log.Info(r.Payload.(map[string]interface{})["joke"])
+			}
 
 			wg.Done()
 		},
