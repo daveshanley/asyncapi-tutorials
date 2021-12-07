@@ -57,19 +57,14 @@ func main() {
 	jokeSubHandler.Handle(
 		func(msg *model.Message) {
 
-			// unmarshal the message payload into a model.Response object
-			// this is a wrapper transport uses when being used as a server,
-			// it encapsulates a rich set of data about the message,
-			// but you only really care about the payload (body)
+			// extract our Joke response
 			var joke services.Joke
 			if err := msg.CastPayloadToType(&joke); err != nil {
 				fmt.Printf("failed to cast payload: %s\n", err.Error())
 			} else {
 				// log out our joke to the console.
-				utils.Log.Info(r.Payload.(map[string]interface{})["joke"])
-
+				utils.Log.Info(joke.Joke)
 			}
-
 			wg.Done()
 		},
 		func(err error) {

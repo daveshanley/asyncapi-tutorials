@@ -263,6 +263,7 @@ github.com/mitchellh/mapstructure v0.0.0-20160808181253-ca63d7c062ee/go.mod h1:F
 github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
 github.com/mitchellh/mapstructure v1.4.1 h1:CpVNEelQCZBooIPDn+AR3NpivK/TIKU8bDxdASFVQag=
 github.com/mitchellh/mapstructure v1.4.1/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
+github.com/mitchellh/mapstructure v1.4.2 h1:6h7AQ0yhTcIsmFmnAwQls75jp2Gzs4iB8W7pjMO+rqo=
 github.com/mitchellh/mapstructure v1.4.2/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
@@ -342,6 +343,8 @@ github.com/vmware/transport-go v1.3.2 h1:/mouAXmIbRg4Owi5uBKSVFiSdShWXCoelKzGot5
 github.com/vmware/transport-go v1.3.2/go.mod h1:K/KKUmxY0RFubS0IBc427lHiGThyXUxbsxsRoXnWbR0=
 github.com/vmware/transport-go v1.3.3-0.20211201171517-553eea51bf02 h1:7vMK62BvpMh0KyR0ZttGUQ7JP80hj+aFluGWtxGlDc4=
 github.com/vmware/transport-go v1.3.3-0.20211201171517-553eea51bf02/go.mod h1:uqA7IKnGtaGo9D32utAA5isbupf54HpAC4mLXDYk2dk=
+github.com/vmware/transport-go v1.3.3 h1:fbFadv6G2zOJrBHf0Tb3pThpQuhED/x4wZMxujZJe6w=
+github.com/vmware/transport-go v1.3.3/go.mod h1:uqA7IKnGtaGo9D32utAA5isbupf54HpAC4mLXDYk2dk=
 github.com/xanzy/ssh-agent v0.3.0/go.mod h1:3s9xbODqPuuhK9JV1R321M/FlMZSBvE5aY6eAcqrDh0=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
