@@ -19,7 +19,7 @@ This code accompanies an article on [quobix.com](https://quobix.com).
 
 2. Boot the server and service.
 
-`go run server/server.go &`
+`go run server/server.go`
 
 3. Open a new terminal window and run the client. Enjoy your terrible joke.
 
