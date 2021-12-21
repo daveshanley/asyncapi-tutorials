@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"sync"
 
 	"github.com/vmware/transport-go/bridge"
@@ -59,23 +58,11 @@ func main() {
 	handler.Handle(
 		func(msg *model.Message) {
 
-			// unmarshal the message payload into a model.Response object
-			// this is a wrapper transport uses when being used as a server,
-			// it encapsulates a rich set of data about the message,
-			// but you only really care about the payload (body)
-			r := &model.Response{}
-			d := msg.Payload.([]byte)
-			err := json.Unmarshal(d, &r)
-			if err != nil {
-				utils.Log.Errorf("error unmarshalling request: %v", err.Error())
-				return
-			}
-
-			// the value we want is in the payload of our model.Response
-			value := r.Payload.(string)
+			var randomWord string
+			msg.CastPayloadToType(&randomWord)
 
 			// log it out.
-			utils.Log.Infof("Random word: %s", value)
+			utils.Log.Infof("Random word: %s", randomWord)
 
 			wg.Done()
 		},
